@@ -1,0 +1,10 @@
+{
+	"name": "@char/clearqueue",
+	"description": "Changes the clear queue button to only clear unplayed songs",
+	"author": {
+		"name": "charmines",
+		"url": "https://github.com/ilikestohack"
+	},
+	"main": "./src/index.ts",
+	"type": "module"
+}
