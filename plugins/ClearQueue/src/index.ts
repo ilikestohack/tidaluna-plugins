@@ -10,6 +10,7 @@ trace.msg.log(`Loaded!`);
 export const unloads = new Set<LunaUnload>();
 
 let shifting = false;
+let firstUIDForSelect: string | false = false;
 
 // Log to console whenever changing page
 redux.intercept("playQueue/CLEAR_QUEUE", unloads, (payload) => {
@@ -24,6 +25,44 @@ redux.intercept("playQueue/CLEAR_QUEUE", unloads, (payload) => {
 	for (const song of removedItems) {
 		redux.actions["playQueue/REMOVE_ELEMENT"]({ uid: song.uid });
 	}
+
+	trace.msg.log(`Removed ${removedItems.length} items from the queue!`);
+
+	return true;
+});
+
+redux.intercept("playQueue/REMOVE_ELEMENT", unloads, (payload) => {
+	if (!shifting) return false;
+
+	const uid = payload.uid;
+
+	if (firstUIDForSelect) {
+		const playQueue = redux.store.getState().playQueue;
+		const playQueueElementsCopy = [...playQueue.elements];
+
+		const first = playQueueElementsCopy.findIndex((e) => e.uid === firstUIDForSelect);
+		const last = playQueueElementsCopy.findIndex((e) => e.uid === uid);
+
+		const removeElements = playQueueElementsCopy.slice(first, last + 1);
+
+		console.log("AAA", removeElements);
+
+		if (removeElements.length < 0) {
+			firstUIDForSelect = false;
+			return false;
+		}
+
+		for (const song of removeElements) {
+			redux.actions["playQueue/REMOVE_ELEMENT"]({ uid: song.uid });
+		}
+
+		trace.msg.log(`Removed ${removeElements.length} items from the queue!`);
+
+		firstUIDForSelect = false;
+	} else {
+		firstUIDForSelect = uid;
+	}
+
 	return true;
 });
 
