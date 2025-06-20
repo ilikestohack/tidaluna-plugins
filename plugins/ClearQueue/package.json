@@ -1,6 +1,6 @@
 {
 	"name": "@char/clearqueue",
-	"description": "Changes the clear queue button to only clear unplayed songs",
+	"description": "Changes the clear queue button to only clear unplayed songs. Holding shift and clicking the clear button will run the regular clear action. Also adds the ability to hold shift and click two remove song buttons in order and remove all songs in between.",
 	"author": {
 		"name": "charmines",
 		"url": "https://github.com/ilikestohack"

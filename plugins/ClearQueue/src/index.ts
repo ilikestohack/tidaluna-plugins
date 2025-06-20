@@ -31,6 +31,7 @@ redux.intercept("playQueue/CLEAR_QUEUE", unloads, (payload) => {
 	return true;
 });
 
+// Note that the remove element does not appear to occur when using the above remove element call.
 redux.intercept("playQueue/REMOVE_ELEMENT", unloads, (payload) => {
 	if (!shifting) return false;
 
