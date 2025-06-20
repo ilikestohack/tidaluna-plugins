@@ -27,14 +27,16 @@ redux.intercept("playQueue/CLEAR_QUEUE", unloads, (payload) => {
 	return true;
 });
 
-function setShift(state = true) {
-	shifting = state;
+function setShift(e: KeyboardEvent) {
+	if (!e.shiftKey) {
+		shifting = false;
+	} else shifting = true;
 }
 
-window.addEventListener("keydown", () => setShift());
-window.addEventListener("keyup", () => setShift(false));
+window.addEventListener("keydown", setShift);
+window.addEventListener("keyup", setShift);
 
 unloads.add(() => {
-	window.removeEventListener("keydown", () => setShift());
-	window.removeEventListener("keyup", () => setShift(false));
+	window.removeEventListener("keydown", setShift);
+	window.removeEventListener("keyup", setShift);
 });
