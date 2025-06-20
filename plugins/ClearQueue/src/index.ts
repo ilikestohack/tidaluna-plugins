@@ -8,13 +8,15 @@ trace.msg.log(`Loaded!`);
 // Functions in unloads are called when plugin is unloaded.
 // Used to clean up resources, even listener dispose etc should be added here
 export const unloads = new Set<LunaUnload>();
+import { Settings, settings } from "./Settings";
+export { Settings };
 
 let shifting = false;
 let firstUIDForSelect: string | false = false;
 
 // Log to console whenever changing page
 redux.intercept("playQueue/CLEAR_QUEUE", unloads, (payload) => {
-	if (shifting) return false;
+	if (shifting || !settings.cpq) return false;
 
 	const playQueue = redux.store.getState().playQueue;
 	const playQueueElementsCopy = [...playQueue.elements];
@@ -33,7 +35,7 @@ redux.intercept("playQueue/CLEAR_QUEUE", unloads, (payload) => {
 
 // Note that the remove element does not appear to occur when using the above remove element call.
 redux.intercept("playQueue/REMOVE_ELEMENT", unloads, (payload) => {
-	if (!shifting) return false;
+	if (!shifting || !settings.mrm) return false;
 
 	const uid = payload.uid;
 
